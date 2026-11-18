@@ -31,6 +31,27 @@ class Creature:
         return f"{self.name}: HP={self.hp}, ATK={self.attack_power}"
 
 
+class FlyingCreature(Creature):
+    def __init__(self, name, hp, attack_power, altitude=0):
+        Creature.__init__(self, name, hp, attack_power)
+        self._altitude = altitude
+
+    @property
+    def altitude(self):
+        return self._altitude
+
+    def fly_to(self, new_altitude):
+        self._altitude = new_altitude
+        print(f"{self.name} flies to altitude {self.altitude}!")
+
+    def attack(self, target):
+        print(f"{self.name} dives from altitude {self.altitude} and strikes {target.name} for {self.attack_power} damage!")
+        target.hp -= self.attack_power
+
+    def __str__(self):
+        return f"{self.name}: HP={self.hp}, ATK={self.attack_power}, ALT={self.altitude}"
+
+
 if __name__ == "__main__":
     print("\n---- creature tests ----")
     c1 = Creature("Goblin", 30, 5)
@@ -40,3 +61,10 @@ if __name__ == "__main__":
     c1.attack(c2)
     print(c2)
     print("c2 alive?", c2.is_alive())
+
+    print("\n---- flying creature tests ----")
+    f1 = FlyingCreature("Dragon", 50, 10)
+    print(f1)
+    f1.fly_to(100)
+    f1.attack(c2)
+    print(c2)
