@@ -73,6 +73,29 @@ class SwimmingCreature(Creature):
         return f"{self.name}: HP={self.hp}, ATK={self.attack_power}, DEPTH={self.depth}"
 
 
+class FireCreature(Creature):
+    def __init__(self, name, hp, attack_power, fire_level=0):
+        Creature.__init__(self, name, hp, attack_power)
+        self._fire_level = fire_level
+
+    @property
+    def fire_level(self):
+        return self._fire_level
+
+    def emit_fire(self, new_fire_level):
+        self._fire_level = max(0, min(100, new_fire_level))
+        print(f"{self.name} raises fire level to {self.fire_level}!")
+
+    def attack(self, target):
+        bonus = self.fire_level // 10
+        total_damage = self.attack_power + bonus
+        print(f"{self.name} unleashes a blazing attack (fire level {self.fire_level}) on {target.name} for {total_damage} damage!")
+        target.hp -= total_damage
+
+    def __str__(self):
+        return f"{self.name}: HP={self.hp}, ATK={self.attack_power}, FIRE={self.fire_level}"
+
+
 if __name__ == "__main__":
     print("\n---- creature tests ----")
     c1 = Creature("Goblin", 30, 5)
@@ -96,3 +119,11 @@ if __name__ == "__main__":
     s1.dive_to(50)
     s1.attack(c2)
     print(c2)
+
+    print("\n---- fire creature tests ----")
+    fc1 = FireCreature("Phoenix", 45, 7)
+    print(fc1)
+    fc1.emit_fire(80)
+    fc1.attack(c2)
+    print(c2)
+    print("Phoenix alive?", fc1.is_alive())
